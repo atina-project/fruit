@@ -30,7 +30,6 @@ endif()
 if(${FRUIT_INSTALL_LIB_ONLY})
 
     if(NOT "${FRUIT_INSTALL_LIB_PATH}" STREQUAL "" AND NOT "${FRUIT_INSTALL_LIB_PATH}" STREQUAL "OFF")
-        message(1)
         set(_install_lib_path ${FRUIT_INSTALL_LIB_PATH})
     else()
         set(_install_lib_path ${CMAKE_INSTALL_LIBDIR})
