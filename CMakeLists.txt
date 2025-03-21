@@ -41,6 +41,10 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build shared library" ON)
 
+option(FRUIT_BUILD_LIB_ONLY "Build fruit lib only" OFF)
+option(FRUIT_INSTALL_LIB_ONLY "Install fruit lib only" OFF)
+option(FRUIT_INSTALL_LIB_PATH "The path the compiled lib should be installed to" OFF)
+
 set(FRUIT_ADDITIONAL_CXX_FLAGS "" CACHE STRING "Additional CXX compiler flags." FORCE)
 
 set(FRUIT_ADDITIONAL_COMPILE_FLAGS "${FRUIT_ADDITIONAL_CXX_FLAGS}")
@@ -145,7 +149,7 @@ include(GNUInstallDirs)
 add_subdirectory(configuration)
 add_subdirectory(src)
 
-if(NOT "${FRUIT_IS_BEING_BUILT_BY_CONAN}")
+if(NOT "${FRUIT_IS_BEING_BUILT_BY_CONAN}" AND NOT ${FRUIT_BUILD_LIB_ONLY})
   if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     # Do not exclude these from "make all" in debug mode, they must build.
     add_subdirectory(examples)
@@ -158,11 +162,15 @@ if(NOT "${FRUIT_IS_BEING_BUILT_BY_CONAN}")
   add_subdirectory(extras EXCLUDE_FROM_ALL)
 endif()
 
-install(DIRECTORY include/fruit/
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/fruit
-  FILES_MATCHING PATTERN "*.h")
+if(NOT ${FRUIT_INSTALL_LIB_ONLY})
 
-set(CPACK_PACKAGE_NAME "Fruit")
-set(CPACK_PACKAGE_VENDOR "Marco Poletti")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Fruit - Dependency Injection Framework For C++")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "Fruit")
+  install(DIRECTORY include/fruit/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/fruit
+    FILES_MATCHING PATTERN "*.h")
+
+  set(CPACK_PACKAGE_NAME "Fruit")
+  set(CPACK_PACKAGE_VENDOR "Marco Poletti")
+  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Fruit - Dependency Injection Framework For C++")
+  set(CPACK_PACKAGE_INSTALL_DIRECTORY "Fruit")
+
+endif()

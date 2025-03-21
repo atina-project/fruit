@@ -27,7 +27,25 @@ if(FRUIT_USES_BOOST)
     target_include_directories(fruit PRIVATE ${Boost_INCLUDE_DIRS})
 endif()
 
-install(TARGETS fruit
-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+if(${FRUIT_INSTALL_LIB_ONLY})
+
+    if(NOT "${FRUIT_INSTALL_LIB_PATH}" STREQUAL "" AND NOT "${FRUIT_INSTALL_LIB_PATH}" STREQUAL "OFF")
+        message(1)
+        set(_install_lib_path ${FRUIT_INSTALL_LIB_PATH})
+    else()
+        set(_install_lib_path ${CMAKE_INSTALL_LIBDIR})
+    endif()
+
+    install(TARGETS fruit
+        RUNTIME DESTINATION "${_install_lib_path}"
+        ARCHIVE DESTINATION "${_install_lib_path}"
+        LIBRARY DESTINATION "${_install_lib_path}")
+
+else()
+
+    install(TARGETS fruit
+        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+
+endif()
